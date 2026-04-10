@@ -115,17 +115,20 @@
     [data-theme="dark"] mark { background: #7c6f00; color: #fff; }
 
     footer { text-align: center; padding: 20px; font-size: 0.78rem; color: var(--text-dim); }
+    footer a { color: var(--text-sub); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
   </style>
 </head>
 <body>
 
 <header>
   <div>
-    <h1>清院本清明上河圖</h1>
+    <h1 data-i18n="title">清院本清明上河圖</h1>
     <div class="meta">
       <span data-i18n="total"></span>　｜
       <span data-i18n="updated-label"></span>：<span id="updated"></span>　｜
-      <a href="https://www.bannergress.com/banner/%E6%B8%85%E9%99%A2%E6%9C%AC%E6%B8%85%E6%98%8E%E4%B8%8A%E6%B2%B3%E5%9C%96-a966" target="_blank" data-i18n="view-bg"></a>
+      <a href="https://www.bannergress.com/banner/%E6%B8%85%E9%99%A2%E6%9C%AC%E6%B8%85%E6%98%8E%E4%B8%8A%E6%B2%B3%E5%9C%96-a966" target="_blank" data-i18n="view-bg"></a>　｜
+      <a href="https://t.me/QingMingFestival_1152missions" target="_blank" data-i18n="view-tg"></a>
     </div>
   </div>
   <div class="header-controls">
@@ -9408,9 +9411,11 @@ let currentLang = 'zh';
 
 const i18n = {
   zh: {
+    'title':           '清院本清明上河圖',
     'total':           '共 1152 個任務',
     'updated-label':   '最後更新',
     'view-bg':         '在 Bannergress 查看 ↗',
+    'view-tg':         'Telegram 討論群 ↗',
     'lbl-ok':          '✅ 正常',
     'lbl-risk':        '⚠️ 有 Portal 消失',
     'lbl-critical':    '🔴 危險',
@@ -9433,12 +9438,14 @@ const i18n = {
     'badge-dead':      '❌ 已消失',
     'empty':           '沒有符合的任務',
     'showing':         n => '顯示 ' + n + ' 筆',
-    'footer':          '資料來源：Ingress Intel Map　｜　僅供參考，實際狀況以遊戲內為準',
+    'footer':          '資料來源：<a href="https://intel.ingress.com/intel" target="_blank">Ingress Intel Map</a>　｜　僅供參考，實際狀況以遊戲內為準',
   },
   en: {
+    'title':           'Qing Ming Festival',
     'total':           '1152 missions total',
     'updated-label':   'Last updated',
     'view-bg':         'View on Bannergress ↗',
+    'view-tg':         'Telegram Group ↗',
     'lbl-ok':          '✅ Healthy',
     'lbl-risk':        '⚠️ AT_RISK',
     'lbl-critical':    '🔴 CRITICAL',
@@ -9461,7 +9468,7 @@ const i18n = {
     'badge-dead':      '❌ DEAD',
     'empty':           'No matching missions',
     'showing':         n => 'Showing ' + n + ' result' + (n === 1 ? '' : 's'),
-    'footer':          'Data source: Ingress Intel Map  |  For reference only.',
+    'footer':          'Data source: <a href="https://intel.ingress.com/intel" target="_blank">Ingress Intel Map</a>  |  For reference only.',
   }
 };
 
@@ -9470,10 +9477,14 @@ function t(key, arg) {
   return typeof val === 'function' ? val(arg) : (val || key);
 }
 
+const I18N_HTML_KEYS = new Set(['footer']);
 function applyLang() {
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.dataset.i18n;
-    if (typeof i18n[currentLang][key] !== 'function') el.textContent = t(key);
+    if (typeof i18n[currentLang][key] !== 'function') {
+      if (I18N_HTML_KEYS.has(key)) el.innerHTML = t(key);
+      else el.textContent = t(key);
+    }
   });
   document.getElementById('search').placeholder = t('search-ph');
   document.getElementById('btn-zh').classList.toggle('lang-active', currentLang === 'zh');
@@ -9498,7 +9509,7 @@ function toggleTheme() {
 
 // Init counts
 document.getElementById('updated').textContent =
-  new Date().toLocaleString('zh-TW', {year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});
+  new Date().toLocaleString('zh-TW', {year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false});
 const counts = {OK:0, AT_RISK:0, CRITICAL:0, DEAD:0};
 missions.forEach(m => { if (counts[m.status] !== undefined) counts[m.status]++; });
 document.getElementById('cnt-ok').textContent       = counts.OK;
