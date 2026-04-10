@@ -125,7 +125,7 @@ function toggleTheme() {
 
 // Init counts & timestamp
 document.getElementById('updated').textContent =
-  new Date().toLocaleString('zh-TW', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false });
+  new Date(generatedAt).toLocaleString('zh-TW', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false });
 const counts = { OK: 0, AT_RISK: 0, CRITICAL: 0, DEAD: 0 };
 missions.forEach(m => { if (counts[m.status] !== undefined) counts[m.status]++; });
 document.getElementById('cnt-ok').textContent       = counts.OK;
